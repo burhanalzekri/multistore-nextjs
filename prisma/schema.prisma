@@ -313,6 +313,7 @@ model Order {
   updatedAt DateTime @updatedAt
   shop Shop @relation(fields:[shopId],references:[id],onDelete:Cascade)
   customer Customer? @relation(fields:[customerId],references:[id],onDelete:SetNull)
+  user User? @relation(fields:[userId],references:[id],onDelete:SetNull)
   items OrderItem[]
   @@unique([shopId,orderNumber])
   @@index([shopId,status,createdAt])
