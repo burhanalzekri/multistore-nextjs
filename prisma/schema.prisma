@@ -1,5 +1,10 @@
-generator client { provider = "prisma-client-js" }
-datasource db { provider = "postgresql" url = env("DATABASE_URL") }
+generator client {
+  provider = "prisma-client-js"
+}
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
 
 enum Role {
   SUPER_ADMIN
@@ -52,26 +57,27 @@ enum NotificationChannel {
 }
 
 model User {
- id String @id @default(cuid())
- name String?
- email String @unique
- emailVerified DateTime?
- image String?
- passwordHash String?
- role Role @default(CUSTOMER)
- isActive Boolean @default(true)
- twoFactorEnabled Boolean @default(false)
- preferredShopId String?
- createdAt DateTime @default(now())
- updatedAt DateTime @updatedAt
- accounts Account[]
- sessions Session[]
- shopMemberships ShopMember[]
- orders Order[]
- activityLogs ActivityLog[]
- @@index([role, isActive])
+  id String @id @default(cuid())
+  name String?
+  email String @unique
+  emailVerified DateTime?
+  image String?
+  passwordHash String?
+  role Role @default(CUSTOMER)
+  isActive Boolean @default(true)
+  twoFactorEnabled Boolean @default(false)
+  preferredShopId String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  accounts Account[]
+  sessions Session[]
+  shopMemberships ShopMember[]
+  orders Order[]
+  activityLogs ActivityLog[]
+  @@index([role, isActive])
 }
-model Account { userId String
+model Account {
+  userId String
   type String
   provider String
   providerAccountId String
@@ -83,88 +89,94 @@ model Account { userId String
   id_token String? @db.Text
   session_state String?
   user User @relation(fields:[userId],references:[id],onDelete: Cascade)
-  @@id([provider,providerAccountId]) }
-model Session { sessionToken String @unique
+  @@id([provider,providerAccountId])
+}
+model Session {
+  sessionToken String @unique
   userId String
   expires DateTime
   user User @relation(fields:[userId],references:[id],onDelete: Cascade)
-  @@index([userId]) }
-model VerificationToken { identifier String
+  @@index([userId])
+}
+model VerificationToken {
+  identifier String
   token String @unique
   expires DateTime
-  @@unique([identifier,token]) }
-model Shop {
- id String @id @default(cuid())
- name String
- slug String @unique
- description String? @db.Text
- logoUrl String?
- faviconUrl String?
- coverUrl String?
- status ShopStatus @default(PENDING)
- primaryColor String @default("#f59e0b")
- secondaryColor String @default("#ea580c")
- currency String @default("USD")
- currencySymbol String @default("$")
- currencyPosition String @default("before")
- decimals Int @default(2)
- decimalSeparator String @default(".")
- thousandsSeparator String @default(",")
- language String @default("ar")
- direction String @default("rtl")
- timezone String @default("Asia/Aden")
- calendar String @default("gregorian")
- units String @default("metric")
- contactEmail String?
- phone String?
- phoneExtra1 String?
- phoneExtra2 String?
- whatsapp String?
- address String?
- city String?
- region String?
- postcode String?
- country String @default("YE")
- googleMapsUrl String?
- shippingMethods Json?
- paymentMethods Json?
- taxName String?
- taxPercent Float @default(0)
- taxInclusive Boolean @default(false)
- taxNumber String?
- socialLinks Json?
- seoTitle String?
- seoDescription String? @db.Text
- seoKeywords String?
- ogImage String?
- googleAnalyticsId String?
- facebookPixelId String?
- customDomain String? @unique
- webhookUrl String?
- apiKeyHash String?
- productLimit Int @default(100)
- storageLimitMb Int @default(1024)
- createdAt DateTime @default(now())
- updatedAt DateTime @updatedAt
- members ShopMember[]
- products Product[]
- categories Category[]
- customers Customer[]
- orders Order[]
- coupons Coupon[]
- flashSales FlashSale[]
- loyaltyTransactions LoyaltyTransaction[]
- reviews Review[]
- wishlists Wishlist[]
- smsLogs SmsLog[]
- emailCampaigns EmailCampaign[]
- activityLogs ActivityLog[]
- siteSettings SiteSetting[]
- subscriptions Subscription[]
- pages StorePage[]
- @@index([status,createdAt])
+  @@unique([identifier,token])
 }
-model ShopMember { id String @id @default(cuid())
+model Shop {
+  id String @id @default(cuid())
+  name String
+  slug String @unique
+  description String? @db.Text
+  logoUrl String?
+  faviconUrl String?
+  coverUrl String?
+  status ShopStatus @default(PENDING)
+  primaryColor String @default("#f59e0b")
+  secondaryColor String @default("#ea580c")
+  currency String @default("USD")
+  currencySymbol String @default("$")
+  currencyPosition String @default("before")
+  decimals Int @default(2)
+  decimalSeparator String @default(".")
+  thousandsSeparator String @default(",")
+  language String @default("ar")
+  direction String @default("rtl")
+  timezone String @default("Asia/Aden")
+  calendar String @default("gregorian")
+  units String @default("metric")
+  contactEmail String?
+  phone String?
+  phoneExtra1 String?
+  phoneExtra2 String?
+  whatsapp String?
+  address String?
+  city String?
+  region String?
+  postcode String?
+  country String @default("YE")
+  googleMapsUrl String?
+  shippingMethods Json?
+  paymentMethods Json?
+  taxName String?
+  taxPercent Float @default(0)
+  taxInclusive Boolean @default(false)
+  taxNumber String?
+  socialLinks Json?
+  seoTitle String?
+  seoDescription String? @db.Text
+  seoKeywords String?
+  ogImage String?
+  googleAnalyticsId String?
+  facebookPixelId String?
+  customDomain String? @unique
+  webhookUrl String?
+  apiKeyHash String?
+  productLimit Int @default(100)
+  storageLimitMb Int @default(1024)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  members ShopMember[]
+  products Product[]
+  categories Category[]
+  customers Customer[]
+  orders Order[]
+  coupons Coupon[]
+  flashSales FlashSale[]
+  loyaltyTransactions LoyaltyTransaction[]
+  reviews Review[]
+  wishlists Wishlist[]
+  smsLogs SmsLog[]
+  emailCampaigns EmailCampaign[]
+  activityLogs ActivityLog[]
+  siteSettings SiteSetting[]
+  subscriptions Subscription[]
+  pages StorePage[]
+  @@index([status,createdAt])
+}
+model ShopMember {
+  id String @id @default(cuid())
   shopId String
   userId String
   role Role @default(SHOP_STAFF)
@@ -174,8 +186,10 @@ model ShopMember { id String @id @default(cuid())
   user User @relation(fields:[userId],references:[id],onDelete:Cascade)
   @@unique([shopId,userId])
   @@index([shopId,role])
-  @@index([userId]) }
-model Product { id String @id @default(cuid())
+  @@index([userId])
+}
+model Product {
+  id String @id @default(cuid())
   shopId String
   categoryId String?
   name String
@@ -207,8 +221,10 @@ model Product { id String @id @default(cuid())
   @@index([shopId,status,createdAt])
   @@index([shopId,categoryId])
   @@index([shopId,name])
-  @@index([shopId,barcode]) }
-model ProductVariant { id String @id @default(cuid())
+  @@index([shopId,barcode])
+}
+model ProductVariant {
+  id String @id @default(cuid())
   shopId String
   productId String
   name String
@@ -220,8 +236,10 @@ model ProductVariant { id String @id @default(cuid())
   imageUrl String?
   product Product @relation(fields:[productId],references:[id],onDelete:Cascade)
   @@index([shopId,productId])
-  @@index([shopId,sku]) }
-model Category { id String @id @default(cuid())
+  @@index([shopId,sku])
+}
+model Category {
+  id String @id @default(cuid())
   shopId String
   parentId String?
   name String
@@ -235,8 +253,10 @@ model Category { id String @id @default(cuid())
   children Category[] @relation("CategoryTree")
   products Product[]
   @@unique([shopId,slug])
-  @@index([shopId,parentId,sortOrder]) }
-model Customer { id String @id @default(cuid())
+  @@index([shopId,parentId,sortOrder])
+}
+model Customer {
+  id String @id @default(cuid())
   shopId String
   userId String?
   name String
@@ -250,8 +270,10 @@ model Customer { id String @id @default(cuid())
   addresses CustomerAddress[]
   @@index([shopId,email])
   @@index([shopId,phone])
-  @@index([shopId,createdAt]) }
-model CustomerAddress { id String @id @default(cuid())
+  @@index([shopId,createdAt])
+}
+model CustomerAddress {
+  id String @id @default(cuid())
   shopId String
   customerId String
   label String?
@@ -264,8 +286,10 @@ model CustomerAddress { id String @id @default(cuid())
   country String
   isDefault Boolean @default(false)
   customer Customer @relation(fields:[customerId],references:[id],onDelete:Cascade)
-  @@index([shopId,customerId]) }
-model Order { id String @id @default(cuid())
+  @@index([shopId,customerId])
+}
+model Order {
+  id String @id @default(cuid())
   shopId String
   customerId String?
   userId String?
@@ -293,8 +317,10 @@ model Order { id String @id @default(cuid())
   @@unique([shopId,orderNumber])
   @@index([shopId,status,createdAt])
   @@index([shopId,paymentStatus])
-  @@index([shopId,customerId]) }
-model OrderItem { id String @id @default(cuid())
+  @@index([shopId,customerId])
+}
+model OrderItem {
+  id String @id @default(cuid())
   shopId String
   orderId String
   productId String?
@@ -306,8 +332,10 @@ model OrderItem { id String @id @default(cuid())
   order Order @relation(fields:[orderId],references:[id],onDelete:Cascade)
   product Product? @relation(fields:[productId],references:[id],onDelete:SetNull)
   @@index([shopId,orderId])
-  @@index([shopId,productId]) }
-model Coupon { id String @id @default(cuid())
+  @@index([shopId,productId])
+}
+model Coupon {
+  id String @id @default(cuid())
   shopId String
   code String
   type DiscountType
@@ -322,8 +350,10 @@ model Coupon { id String @id @default(cuid())
   createdAt DateTime @default(now())
   shop Shop @relation(fields:[shopId],references:[id],onDelete:Cascade)
   @@unique([shopId,code])
-  @@index([shopId,isActive,expiresAt]) }
-model FlashSale { id String @id @default(cuid())
+  @@index([shopId,isActive,expiresAt])
+}
+model FlashSale {
+  id String @id @default(cuid())
   shopId String
   name String
   startsAt DateTime
@@ -332,8 +362,10 @@ model FlashSale { id String @id @default(cuid())
   productIds String[]
   isActive Boolean @default(true)
   shop Shop @relation(fields:[shopId],references:[id],onDelete:Cascade)
-  @@index([shopId,isActive,startsAt,endsAt]) }
-model LoyaltyTransaction { id String @id @default(cuid())
+  @@index([shopId,isActive,startsAt,endsAt])
+}
+model LoyaltyTransaction {
+  id String @id @default(cuid())
   shopId String
   customerId String
   points Int
@@ -341,8 +373,10 @@ model LoyaltyTransaction { id String @id @default(cuid())
   orderId String?
   createdAt DateTime @default(now())
   shop Shop @relation(fields:[shopId],references:[id],onDelete:Cascade)
-  @@index([shopId,customerId,createdAt]) }
-model Review { id String @id @default(cuid())
+  @@index([shopId,customerId,createdAt])
+}
+model Review {
+  id String @id @default(cuid())
   shopId String
   productId String
   customerName String
@@ -352,16 +386,20 @@ model Review { id String @id @default(cuid())
   createdAt DateTime @default(now())
   shop Shop @relation(fields:[shopId],references:[id],onDelete:Cascade)
   product Product @relation(fields:[productId],references:[id],onDelete:Cascade)
-  @@index([shopId,productId,isApproved]) }
-model Wishlist { id String @id @default(cuid())
+  @@index([shopId,productId,isApproved])
+}
+model Wishlist {
+  id String @id @default(cuid())
   shopId String
   customerKey String
   productId String
   createdAt DateTime @default(now())
   shop Shop @relation(fields:[shopId],references:[id],onDelete:Cascade)
   @@unique([shopId,customerKey,productId])
-  @@index([shopId,customerKey]) }
-model SmsLog { id String @id @default(cuid())
+  @@index([shopId,customerKey])
+}
+model SmsLog {
+  id String @id @default(cuid())
   shopId String
   recipient String
   message String @db.Text
@@ -371,8 +409,10 @@ model SmsLog { id String @id @default(cuid())
   error String?
   createdAt DateTime @default(now())
   shop Shop @relation(fields:[shopId],references:[id],onDelete:Cascade)
-  @@index([shopId,status,createdAt]) }
-model EmailCampaign { id String @id @default(cuid())
+  @@index([shopId,status,createdAt])
+}
+model EmailCampaign {
+  id String @id @default(cuid())
   shopId String
   title String
   subject String
@@ -383,8 +423,10 @@ model EmailCampaign { id String @id @default(cuid())
   recipientCount Int @default(0)
   createdAt DateTime @default(now())
   shop Shop @relation(fields:[shopId],references:[id],onDelete:Cascade)
-  @@index([shopId,status,createdAt]) }
-model ActivityLog { id String @id @default(cuid())
+  @@index([shopId,status,createdAt])
+}
+model ActivityLog {
+  id String @id @default(cuid())
   shopId String?
   userId String?
   action String
@@ -397,19 +439,21 @@ model ActivityLog { id String @id @default(cuid())
   user User? @relation(fields:[userId],references:[id],onDelete:SetNull)
   @@index([shopId,createdAt])
   @@index([userId,createdAt])
-  @@index([action,createdAt]) }
-model SiteSetting {
- id String @id @default(cuid())
- scopeId String @default("platform")
- shopId String?
- key String
- value Json
- updatedAt DateTime @updatedAt
- shop Shop? @relation(fields:[shopId],references:[id],onDelete:Cascade)
- @@unique([scopeId,key])
- @@index([key])
+  @@index([action,createdAt])
 }
-model Plan { id String @id @default(cuid())
+model SiteSetting {
+  id String @id @default(cuid())
+  scopeId String @default("platform")
+  shopId String?
+  key String
+  value Json
+  updatedAt DateTime @updatedAt
+  shop Shop? @relation(fields:[shopId],references:[id],onDelete:Cascade)
+  @@unique([scopeId,key])
+  @@index([key])
+}
+model Plan {
+  id String @id @default(cuid())
   name String
   slug String @unique
   description String?
@@ -422,8 +466,10 @@ model Plan { id String @id @default(cuid())
   features Json?
   isActive Boolean @default(true)
   createdAt DateTime @default(now())
-  subscriptions Subscription[] }
-model Subscription { id String @id @default(cuid())
+  subscriptions Subscription[]
+}
+model Subscription {
+  id String @id @default(cuid())
   shopId String
   planId String
   status SubscriptionStatus @default(TRIALING)
@@ -438,8 +484,10 @@ model Subscription { id String @id @default(cuid())
   plan Plan @relation(fields:[planId],references:[id])
   invoices Invoice[]
   @@index([shopId,status])
-  @@index([status,endsAt]) }
-model Invoice { id String @id @default(cuid())
+  @@index([status,endsAt])
+}
+model Invoice {
+  id String @id @default(cuid())
   subscriptionId String
   number String @unique
   amount Decimal @db.Decimal(12,2)
@@ -449,8 +497,10 @@ model Invoice { id String @id @default(cuid())
   paidAt DateTime?
   createdAt DateTime @default(now())
   subscription Subscription @relation(fields:[subscriptionId],references:[id],onDelete:Cascade)
-  @@index([status,dueAt]) }
-model StorePage { id String @id @default(cuid())
+  @@index([status,dueAt])
+}
+model StorePage {
+  id String @id @default(cuid())
   shopId String
   title String
   slug String
@@ -461,4 +511,5 @@ model StorePage { id String @id @default(cuid())
   updatedAt DateTime @updatedAt
   shop Shop @relation(fields:[shopId],references:[id],onDelete:Cascade)
   @@unique([shopId,slug])
-  @@index([shopId,isPublished]) }
+  @@index([shopId,isPublished])
+}
